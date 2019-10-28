@@ -3,10 +3,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t fibtest -f ./client/Dockerfile.dev .
+  - docker build -t forword/fibtest -f ./client/Dockerfile.dev .
 
 script:
-  - docker run fibtest npm test -- --coverage
+  - docker run forword/fibtest npm test -- --coverage
 
 after_success:
   - docker build -t forword/multi-client ./client
