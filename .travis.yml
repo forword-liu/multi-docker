@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t fibtest -f ./client/Dockerfile.dev .
+
+script:
+  - docker run fibtest npm test -- --coverage
+
+after_success:
+  - docker build -t forword/multi-client ./client
+  - docker build -t forword/multi-nginx ./nginx
+  - docker build -t forword/multi-server ./server
+  - docker build -t forword/multi-worker ./worker
+# Log in to the docker CLI
+- echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+# Take those images and push them to docker hub
+- docker push forword/multi-client
+- docker push forword/multi-nginx
+- docker push forword/multi-server
+- docker push forword/multi-worker
